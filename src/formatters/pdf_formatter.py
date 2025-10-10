@@ -59,11 +59,11 @@ class PDFFormatter(BaseFormatter):
         for i, q in enumerate(questions, start=1):
             pdf.set_x(pdf.l_margin)
             safe_multicell(pdf, w, line_h, f"{i}. {q.answer()}")
-            if show_ja and q.ja():
-                pdf.set_text_color(90, 90, 90)
-                pdf.set_x(pdf.l_margin)
-                safe_multicell(pdf, w, line_h, f"和訳：{q.ja()}")
-                pdf.set_text_color(0, 0, 0)
+            # if show_ja and q.ja():
+            #     pdf.set_text_color(90, 90, 90)
+            #     pdf.set_x(pdf.l_margin)
+            #     safe_multicell(pdf, w, line_h, f"和訳：{q.ja()}")
+            #     pdf.set_text_color(0, 0, 0)
             pdf.ln(1)
 
         pdf.output(filename)
