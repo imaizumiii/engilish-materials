@@ -1,6 +1,7 @@
 from .base_formatter import BaseFormatter
 from fpdf import FPDF
 from ..utils.pdf_utils import effective_page_width, safe_multicell
+from ..questions.selection_question import SelectionQuestion
 
 class PDFFormatter(BaseFormatter):
     def export(self, questions, filename: str, **kwargs):
@@ -40,15 +41,33 @@ class PDFFormatter(BaseFormatter):
         for i, q in enumerate(questions, start=1):
             pdf.set_x(pdf.l_margin)
             safe_multicell(pdf, w, line_h, f"{i}. {q.text()}")
+            
             if show_ja and q.ja():
                 pdf.set_text_color(90, 90, 90)
                 pdf.set_x(pdf.l_margin)
                 safe_multicell(pdf, w, line_h, f"和訳：{q.ja()}")
                 pdf.set_text_color(0, 0, 0)
-            # 解答線（1本）
-            pdf.set_x(pdf.l_margin)
-            pdf.cell(w, line_h + 2, "", ln=True, border="B")
-            pdf.ln(1)
+
+            # 4択問題の場合、選択肢を表示
+            if isinstance(q, SelectionQuestion):
+                opts = q.get_options()
+                # 選択肢のフォーマット (1) opt1        (2) opt2 ...
+                # 間隔を広げる（スペース8つ）
+                gap = " " * 8
+                opt_str = f"(1) {opts[0]}{gap}(2) {opts[1]}{gap}(3) {opts[2]}{gap}(4) {opts[3]}"
+                
+                # 少しインデントして表示
+                pdf.set_x(pdf.l_margin + 5)
+                safe_multicell(pdf, w - 5, line_h, opt_str)
+            
+            # 解答線（並べ替え問題のみ）
+            if not isinstance(q, SelectionQuestion):
+                pdf.set_x(pdf.l_margin)
+                pdf.cell(w, line_h + 2, "", ln=True, border="B")
+                pdf.ln(1)
+            else:
+                # 選択問題は線なしで少し空ける
+                pdf.ln(4)
 
         # 解答ページ
         pdf.add_page()
