@@ -1,6 +1,7 @@
 import csv
 from .rearrange_question import RearrangeQuestion
 from .selection_question import SelectionQuestion
+from .translation_question import TranslationQuestion
 from .. import config
 
 def _parse_meta_header(line: str) -> dict:
@@ -66,6 +67,10 @@ class QuestionBank:
                         
                         q = SelectionQuestion(en, ja, options, correct_idx)
                         self._questions.append(q)
+                elif current_type == "translation":
+                    # 英文和訳: [英文, 和訳]
+                    q = TranslationQuestion(en, ja)
+                    self._questions.append(q)
                 else:
                     # 既存の並べ替え問題 (rearrange)
                     q = RearrangeQuestion(

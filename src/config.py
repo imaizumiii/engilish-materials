@@ -6,6 +6,8 @@ ROOT = Path(__file__).resolve().parents[1]
 # 既定メタ（CSV先頭行で上書き可）
 TITLE = "Rearrangement Exercises (Grade 9)"
 INSTRUCTION_JA = "次の語を正しい順に並べ替え，文を完成させなさい。"
+INSTRUCTION_SELECTION = "次の英文の（　）に入れるのに最も適切なものを選びなさい。"
+INSTRUCTION_TRANSLATION = "次の英文を日本語に訳しなさい。"
 
 # 入出力（CLIで --input 指定）
 INPUT_CSV = str(ROOT / "data" / "unit1.csv")  # 既定値（CLIが優先）

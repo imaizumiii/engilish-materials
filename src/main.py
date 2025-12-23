@@ -25,7 +25,16 @@ def build_one(csv_path: Path, out_dir: Path, font_path: str):
     meta = bank.meta()
 
     title = meta.get("title", config.TITLE)
-    instruction = meta.get("instruction", config.INSTRUCTION_JA)
+    
+    q_type = meta.get("type", "rearrange")
+    if q_type == "selection":
+        default_inst = config.INSTRUCTION_SELECTION
+    elif q_type == "translation":
+        default_inst = config.INSTRUCTION_TRANSLATION
+    else:
+        default_inst = config.INSTRUCTION_JA
+
+    instruction = meta.get("instruction", default_inst)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"{csv_path.stem}.pdf"

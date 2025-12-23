@@ -2,6 +2,7 @@ from .base_formatter import BaseFormatter
 from fpdf import FPDF
 from ..utils.pdf_utils import effective_page_width, safe_multicell
 from ..questions.selection_question import SelectionQuestion
+from ..questions.translation_question import TranslationQuestion
 
 class PDFFormatter(BaseFormatter):
     def export(self, questions, filename: str, **kwargs):
@@ -42,7 +43,7 @@ class PDFFormatter(BaseFormatter):
             pdf.set_x(pdf.l_margin)
             safe_multicell(pdf, w, line_h, f"{i}. {q.text()}")
             
-            if show_ja and q.ja():
+            if show_ja and q.ja() and not isinstance(q, TranslationQuestion):
                 pdf.set_text_color(90, 90, 90)
                 pdf.set_x(pdf.l_margin)
                 safe_multicell(pdf, w, line_h, f"和訳：{q.ja()}")
